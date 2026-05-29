@@ -1,65 +1,86 @@
-print("[HỆ THỐNG KIOSK NHÂN SỰ ĐÃ KHỞI ĐỘNG]")
+# ==============================
+# HỆ THỐNG GIẢI MÃ DỮ LIỆU KHO
+# ==============================
+
+raw_batch = " LAP-VN-23-001 ; mou-us-24-012 ; KEY-vn-23-abc ; lap-JP-22-045 ; MOn-vn-24-099 "
 
 while True:
-    print("\n[Nhập thông tin nhân viên]")
-    
-    while True:
-        employee_id = input("1. Enter Employee ID: ")
-        if employee_id.strip() == "":
-            print("[!] LỖI: Mã nhân viên không được bỏ trống. Vui lòng nhập lại!")
-        else:
-            break
-            
-    while True:
-        employee_name = input("2. Enter Full Name: ")
-        if employee_name.strip() == "":
-            print("[!] LỖI: Họ tên không được bỏ trống. Vui lòng nhập lại!")
-        else:
-            break
+    print("\n===== HỆ THỐNG GIẢI MÃ DỮ LIỆU KHO HÀNG =====")
+    print("1. Hiển thị chuỗi mã vạch gốc")
+    print("2. Giải mã, làm sạch và in báo cáo kiểm kê")
+    print("3. Tra cứu nhanh theo đuôi Serial")
+    print("4. Thoát chương trình")
 
-    while True:
-        current_salary = float(input("3. Enter current Salary in VND (Number > 0): "))
-        if current_salary <= 0:
-            print("[!] LỖI: Lương không thể là số âm hoặc bằng 0. Vui lòng nhập lại!")
-        else:
-            break
+    choice = input("Nhập lựa chọn của bạn (1-4): ").strip()
 
-    while True:
-        performance_score = float(input("4. Enter Performance Score (1.0 to 5.0): "))
-        if performance_score < 1.0 or performance_score > 5.0:
-            print("[!] LỖI: Điểm KPI phải nằm trong khoảng từ 1.0 đến 5.0!")
-        else:
-            break
+    if choice == "1":
+        print("\nChuỗi mã vạch gốc:")
+        print(raw_batch)
 
-    while True:
-        experience_years = int(input("5. Enter Year of Experience (Integer >= 0): "))
-        if experience_years < 0:
-            print("[!] LỖI: Số năm kinh nghiệm phải lớn hơn hoặc bằng 0!")
-        else:
-            break
+    elif choice == "2":
+        product_list = raw_batch.split(";")
 
-    print("\n==========================================================")
-    print("                    E-PROFILE CẬP NHẬT                    ")
-    print("==========================================================")
-    print(f" - ID: {employee_id}")
-    print(f" - Name: {employee_name}")
-    print(f" - Salary: {current_salary:,.0f} VND")
-    print(f" - KPI Score: {performance_score} / 5.0")
-    print(f" - Experience: {experience_years} years")
-    print("==========================================================")
+        print("\n===== BÁO CÁO KIỂM KÊ =====")
+        print(f"{'MÃ SP':<10}{'XUẤT XỨ':<12}{'NĂM SX':<10}{'SERIAL':<10}{'TRẠNG THÁI'}")
 
-    print("\n==========================================================")
-    print("                      IT SYSTEM LOG                       ")
-    print("==========================================================")
-    print(f" employee_id        | {type(employee_id)}")
-    print(f" employee_name      | {type(employee_name)}")
-    print(f" current_salary     | {type(current_salary)}")
-    print(f" performance_score  | {type(performance_score)}")
-    print(f" experience_years   | {type(experience_years)}")
-    print("==========================================================")
+        total_product = 0
+        valid_product = 0
 
-    tiep_tuc = input("\nDo you want to enter another employee? (y/n): ")
-    if tiep_tuc.lower() == 'n':
+        for item in product_list:
+            code = item.strip().upper()
+
+            parts = code.split("-")
+
+            if len(parts) == 4:
+                product_type = parts[0]
+                country = parts[1]
+                year = "20" + parts[2]
+                serial = parts[3]
+
+                total_product += 1
+
+                if serial.isdigit():
+                    status = "Pass"
+                    valid_product += 1
+                else:
+                    status = "Lỗi Serial - Reject"
+
+                print(
+                    f"{product_type:<10}"
+                    f"{country:<12}"
+                    f"{year:<10}"
+                    f"{serial:<10}"
+                    f"{status}"
+                )
+
+        print(f"\nĐã giải mã thành công {valid_product} sản phẩm hợp lệ / Tổng số {total_product} sản phẩm.")
+
+    elif choice == "3":
+        search_serial = input("Nhập 2 số cuối của Serial cần tìm: ").strip()
+
+        product_list = raw_batch.split(";")
+
+        found = False
+
+        for item in product_list:
+            code = item.strip().upper()
+
+            parts = code.split("-")
+
+            if len(parts) == 4:
+                serial = parts[3]
+
+                if serial[-2:] == search_serial:
+                    print("\nTìm thấy sản phẩm:")
+                    print(code)
+                    found = True
+
+        if found == False:
+            print("\nKhông tìm thấy sản phẩm phù hợp.")
+
+    elif choice == "4":
+        print("\nĐóng ca kiểm kho. Chào tạm biệt!")
         break
 
-print("\nĐang tắt Kiosk... Tạm biệt!")
+    else:
+        print("\nChức năng không tồn tại, vui lòng nhập số từ 1-4!")
