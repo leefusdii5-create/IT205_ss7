@@ -1,18 +1,15 @@
-print("—- HỆ THỐNG GỬI EMAIL THƯỞNG TẾT —-")
+transaction = "  nguyEN vAn a | PYTHON-01 | 15000000 | paid  "
 
-for employee_number in range(1, 4):
-    print("—- Đang xử lý nhân viên số", employee_number, "—-")
-    
-    working_days = int(input("Nhập số ngày công trong tháng: "))
-    
-    if working_days == 0:
-        print("CẢNH BÁO: Nhân viên nghỉ cả tháng. Không xét duyệt thưởng.")
-    else:
-        bonus_amount = working_days * 200000
-        print("-> Đã gửi Email: Chúc mừng nhận được", bonus_amount, "VNĐ tiền thưởng!")
-        
-    print("————————————————————————————————————————————\n")
+parts = transaction.split("|")
 
-print("Đã hoàn tất quá trình duyệt thưởng cho 3 nhân viên!")
+student_name = parts[0].strip().title()
+course_code = parts[1].strip().upper()
+amount = int(parts[2].strip())
+status = parts[3].strip().upper()
 
-#không có else thì điều kiện vẫn se chạy các dòng dưới 
+formatted_amount = f"{amount:,} VND"
+
+print("Học viên:", student_name)
+print("Khóa học:", course_code)
+print("Số tiền:", formatted_amount)
+print("Trạng thái:", status)
